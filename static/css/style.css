@@ -1,0 +1,149 @@
+@import url("fonts/stylesheet.css");
+html {
+    scroll-behavior: smooth;
+}
+
+:root {
+    --primary-bg-color: #242424;
+    --secondary-bg-color: #1a1a1a;
+    --primary-color: #00fefc;
+    --primary-color-dark: #00dddb;
+    --secondary-color: #b026ff;
+    --secondary-color-dark: #a015ee;
+}
+
+body {
+    background-color: var(--primary-bg-color);
+    overflow-x: hidden;
+    font-family: "Rubik", cursive !important;
+}
+
+/* GLOBAL */
+
+.link {
+    color: var(--primary-color) !important;
+    transition: 0.5s;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: var(--primary-color-dark) !important;
+    transition: 0.5s;
+    text-decoration: none;
+}
+
+.primary-btn-outline {
+    color: var(--primary-color);
+    border: 2px solid currentColor;
+    transition: 0.5s;
+}
+.primary-btn-outline:hover {
+    color: #242424;
+    border: 2px solid var(--primary-color-dark);
+    background-color: var(--primary-color);
+    transition: 0.5s;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-bg-color);
+}
+
+/* GLOBAL */
+
+
+/* Navbar */
+.navbar a {
+    color: var(--primary-color);
+    text-shadow: 0 0 10px currentColor;
+}
+.navbar a:hover,
+.navbar a:active,
+.navbar a:focus {
+    color: var(--primary-color-dark);
+    text-shadow: none;
+}
+.navbar .navbar-brand {
+    font-family: "Dancing Script", cursive;
+    font-weight: bolder;
+    font-size: 30px;
+}
+/* Navbar */
+
+
+/* MOVIES */
+.movies {
+    margin: 30px;
+}
+.movies .col-md-3 .card {
+    background-color: var(--secondary-bg-color);
+}
+.movies .col-md-3 .card .image {
+    overflow: hidden;
+    width: 100%;
+    height: 150px;
+}
+
+.movies .col-md-3 .card .image:hover img {
+    width: 300px;
+    height: 180px;
+    transition: 0.5s;
+}
+.movies .col-md-3 .card .image img {
+    height: 150px;
+    width: 280px;
+    transition: 0.5s;
+}
+.movies .card {
+    color: #c3c3c3;
+}
+/* MOVIES */
+
+
+/* Movie */
+.movie .card {
+    background: none;
+    border: none !important;
+    position: relative;
+}
+.movie .card .image {
+    width: 100%;
+    overflow: hidden;
+    height: 600px;
+
+}
+.movie .card .image img {
+    width: 100%;
+}
+.movie .card .card-body {
+    position: absolute;
+    top: 301px;
+    left:0;
+    width: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), var(--primary-bg-color), var(--primary-bg-color), var(--primary-bg-color));
+    color: #fff;
+}
+/* Movie */
+
+
+/* USER */
+.user {
+    background-color: var(--secondary-bg-color);
+    padding: 20px;
+}
+.user .image {
+    width: 250px;
+    height: 230px;
+    overflow: hidden;
+    background-color: var(--secondary-color);
+}
+/* USER */
+
+
+
+.login {
+    margin-top: 10%;
+}
+.register {
+    margin-top: 1%;
+}

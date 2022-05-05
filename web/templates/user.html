@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <br>
+
+    <div class="row user">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 row">
+            <div class="col-md-6">
+                <div class="image">
+                    <img src="{{ person.profile_picture.url }}" width="100%">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-control">{{ person.name }}</div>
+                <br>
+                <div class="form-control">{{ person.user.email }}</div>
+                <br>
+                <div class="form-control">{{ person.type }}</div>
+                <br>
+                {% if person.user.id == request.user.id %}
+                    <a href="/web/account/{{ request.user.id }}/update/" class="btn primary-btn-outline">Update Profile</a>
+                    &nbsp;
+                    <a href="{% url 'LogoutPage' %}" class="btn btn-outline-danger">Logout</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+{% endblock %}
