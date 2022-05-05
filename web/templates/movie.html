@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+    <div class="movie">
+        <div class="card">
+            <div class="image">
+                <img src="{{ movie.image.url }}">
+            </div>
+            <div class="card-body">
+                <h1>{{ movie.title }}<a href="{% url 'UserPage' pk=movie.movie_added_by.id %}" class="badge bg-info" style="font-size: 10px">{{ movie.movie_added_by }}</a></h1>
+                <h1 class="btn btn-info">
+                    <a href="/web/moviewatchersincrement/{{ movie.id }}/#movie" style="color: #242424" class="">Play ></a>
+                </h1>
+                <h6>Released On: {{ movie.year_released }}</h6>
+                <p>Watched By {{ movie.watched_by }} People</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Description:</h3>
+                        <p>{{ movie.description }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>CAST:</h3>
+                        <p>
+                            {% for actor in movie.cast.all %}
+                                <a class="link" style="font-weight: bolder" href="{% url 'ReadActor' pk=actor.id %}">{{ actor|join:", " }}</a>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+            <br>
+            <br>
+            </div>
+        </div>
+    <br><br><br id="movie">
+    <iframe style="margin:10%; border: none !important;" id="mv" src="{{ movie.url }}" width="80%" height="600px"></iframe>
+    </div>
+
+{% endblock %}
+
+<!--
+gameous
+Gamestrom
+-->

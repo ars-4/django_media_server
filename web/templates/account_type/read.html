@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="Packages" style="margin-left:3%; margin-right:3%;">
+        <br>
+    <h1 class="text-light">Your Packages</h1>
+    <hr class="text-light">
+    <a href="{% url 'CreatePackage' %}" class="btn primary-btn-outline">Add New</a>
+    <br>
+    <br>
+    <div class="row">
+        {% for type in account_types %}
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>{{ type.title }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>{{ type.description }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <p>Price: {{ type.price }} /-</p>
+                        <a href="{% url 'UpdatePackage' pk=type.id %}" class="btn btn-outline-secondary">Update</a>
+                        <a href="{% url 'DeletePackage' pk=type.id %}" class="btn btn-outline-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    </div>
+
+{% endblock %}

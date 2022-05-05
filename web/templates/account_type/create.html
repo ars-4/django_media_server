@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <br><br><br>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h1>Create a new Package:</h1>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input class="form-control" type="text" name="title" placeholder="Choose A Title">
+                <br>
+                <textarea class="form-control" type="text" name="description" placeholder="Write It's Description"></textarea>
+                <br>
+                <input class="form-control" type="number" name="price" placeholder="Choose It's Price">
+                <br>
+                <button class="btn btn-info">Create</button>
+                &nbsp;
+                <a href="{% url 'ReadPackages' %}" class="btn btn-danger">Cancel</a>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+{% endblock %}

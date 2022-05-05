@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <br>
+    <h2 class="text-light">&nbsp;&nbsp;&nbsp;Users List:</h2>
+    <hr>
+    <br>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="user">
+                <table class="table">
+                {% for person in persons %}
+                    <tr>
+                        <td class="text-light">{{ person.user.username }}</td>
+                        <td>
+                            <iframe width="400px" height="50px" src="{% url 'UserAccountManagementForm' pk=person.id %}"></iframe>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+{% endblock %}

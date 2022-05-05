@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <br>
+
+    <div class="row user">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 row">
+            <div class="col-md-6">
+                <div class="image">
+                    <img src="{{ actor.image.url }}" width="100%">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-control">{{ actor.name }}</div>
+                <br>
+                <div class="form-control">{{ actor.date_of_birth }}</div>
+                <br>
+                <div class="form-control">
+                    {% for movie in movies %}
+                        <a class="link" href="{% url 'MoviePage' pk=movie.id %}">{{ movie.title }}</a>, &nbsp;
+                    {% endfor %}
+                </div>
+                <br>
+                {% if request.user.id == 1 %}
+                    <a href="/web/account/{{ request.user.id }}/update/" class="btn primary-btn-outline">Update Profile</a>
+                    &nbsp;
+                    <a href="{% url 'LogoutPage' %}" class="btn btn-outline-danger">Logout</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+{% endblock %}

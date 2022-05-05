@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <br>
+
+    <div class="row user">
+        <div class="col-md-3"></div>
+        <form method="POST" action="" class="col-md-6 row" enctype="multipart/form-data">
+        {% csrf_token %}
+            <div class="col-md-6">
+                <div class="image">
+                    <img src="{{ person.profile_picture.url }}" width="100%">
+                </div>
+                {{ form.profile_picture }}
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" value="{{ form.name.value }}" name="name">
+                <br>
+                <div class="form-control">{{ person.user.email }}</div>
+                <br>
+                <div class="form-control">{{ person.type }}</div>
+                <br>
+                {% if person.user.id == request.user.id %}
+                    <button class="btn primary-btn-outline">Update Profile</button>
+                {% endif %}
+            </div>
+        </form>
+        <div class="col-md-3"></div>
+    </div>
+
+{% endblock %}
