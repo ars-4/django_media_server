@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<style>
+    body {
+        background: transparent !important;
+    }
+</style>
+<body>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <input class="form-control" name="title" placeholder="Choose Tag's Title">
+        <br>
+        <button class="btn btn-outline-info" onclick="jack()">Add Tag</button>
+    </form>
+    <script>
+        function jack() {
+            parent.location.reload();
+        }
+    </script>
+</body>
+</html>

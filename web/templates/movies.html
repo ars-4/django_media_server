@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+    <br>
+    {% if person.type.id == 1 %}
+        &nbsp;&nbsp;&nbsp;<a class="btn primary-btn-outline" href="{% url 'CreateMovie' %}">Add New</a>
+    {% endif %}
+    <br>
+    <div class="row movies">
+    {% for movie in movies %}
+        <div class="col-md-3">
+            <div class="card">
+                <div class="image">
+                    <img src="{{ movie.image.url }}" style="width: 100%">
+                </div>
+                <div class="card-header">
+                    <h2>{{ movie.title }}</h2>
+                    <a>{{ movie.year_released }}</a>
+                </div>
+                <div class="card-body">
+                    {% for tag in movie.tags.all %}
+                        <a href="/web/?tags={{ tag.id }}" class="badge bg-primary">{{ tag }}</a>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <a class="link" href="/web/movie/{{ movie.id }}/">Read More</a>
+                    <p class="link small">Watched by {{ movie.watched_by }} people</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+
+{% endblock %}
