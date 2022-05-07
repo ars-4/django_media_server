@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from pyuploadcare.dj.models import ImageField as pyif
 
 
 # Create your models here.
@@ -23,7 +24,7 @@ class AccountType(BasicModel):
 
 class Person(BasicModel):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(upload_to='profiles', null=True, default='/profiles/avatars.png')
+    profile_picture = pyif(blank=True, null=True, manual_crop='')
     name = models.CharField(max_length=245, null=True, default='None')
     type = models.ForeignKey(AccountType, null=True, on_delete=models.CASCADE)
     key = models.CharField(null=True, default='Empty', max_length=100)
@@ -36,7 +37,7 @@ class Person(BasicModel):
 class Actor(BasicModel):
     name = models.CharField(max_length=245, null=True, default='None')
     date_of_birth = models.DateField(null=True, blank=True)
-    image = models.ImageField(null=True, blank=True, upload_to='actors')
+    image = pyif(blank=True, null=True, manual_crop='')
 
     def __str__(self):
         return self.name
@@ -50,7 +51,7 @@ class Tag(BasicModel):
 
 
 class Movie(BasicModel):
-    image = models.ImageField(null=True, upload_to='movies')
+    image = pyif(blank=True, null=True, manual_crop='')
     title = models.CharField(max_length=100, null=True, default='Unknown Movie')
     description = models.TextField(null=True, default='...')
     url = models.CharField(null=True, blank=True, max_length=245)

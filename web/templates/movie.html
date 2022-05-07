@@ -6,7 +6,7 @@
     <div class="movie">
         <div class="card">
             <div class="image">
-                <img src="{{ movie.image.url }}">
+                <img src="{{ movie.image.cdn_url }}">
             </div>
             <div class="card-body">
                 <h1>{{ movie.title }}<a href="{% url 'UserPage' pk=movie.movie_added_by.id %}" class="badge bg-info" style="font-size: 10px">{{ movie.movie_added_by }}</a></h1>

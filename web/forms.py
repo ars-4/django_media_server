@@ -1,6 +1,7 @@
 from django_filters import FilterSet
 from web.models import *
 from django.forms import ModelForm
+from pyuploadcare.dj.forms import ImageField as fmif
 
 
 class TagFilter(FilterSet):
@@ -10,6 +11,8 @@ class TagFilter(FilterSet):
 
 
 class PersonForm(ModelForm):
+    profile_picture = fmif(label='')
+
     class Meta:
         model = Person
         fields = ['name', 'profile_picture']
@@ -28,12 +31,16 @@ class AccountTypeForm(ModelForm):
 
 
 class MovieForm(ModelForm):
+    image = fmif(label='')
+
     class Meta:
         model = Movie
         fields = ['title', 'description', 'url', 'image', 'movie_added_by', 'cast', 'tags', 'year_released']
 
 
 class ActorForm(ModelForm):
+    image = fmif(label='')
+
     class Meta:
         model = Actor
         fields = '__all__'
