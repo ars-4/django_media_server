@@ -10,8 +10,13 @@ from django.http import HttpResponse
 
 
 def categories(request):
+    if request.user is None:
+        person = Person.objects.get(user_id=request.user.id)
+    else:
+        person = Person.objects.get(id=1)
     context = {
-        'categories': Tag.objects.all()
+        'categories': Tag.objects.all(),
+        'person': person
     }
     return context
 

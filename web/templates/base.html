@@ -39,7 +39,7 @@
                             {% endfor %}
                         </ul>
                     </li>
-                    {% if request.user.id == 1 or request.user.id == 2 %}
+                    {% if person.type.id == 1 %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'ReadPackages' %}">Packages</a>
                         </li>
