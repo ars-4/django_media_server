@@ -19,10 +19,19 @@
                 <div class="form-control">{{ person.type }}</div>
                 <br>
                 {% if person.user.id == request.user.id %}
-                    <a href="/web/account/{{ request.user.id }}/update/" class="btn primary-btn-outline">Update Profile</a>
+                    <a href="/web/account/{{ request.user.id }}/update/" class="btn primary-btn-outline">Update
+                        Profile</a>
                     &nbsp;
                     <a href="{% url 'LogoutPage' %}" class="btn btn-outline-danger">Logout</a>
                 {% endif %}
+            </div>
+            <div>
+                <br>
+                {% if person.user.id == request.user.id %}
+                    <span class="form-control">Due Amount: {{ person.due }}/- </span>
+                {% endif %}
+                <br>
+                <span class="small text-secondary text-center">Remember to pay your dues. If your dues exceeds the limit of amount 3000, your account will be banned without any notice</span>
             </div>
         </div>
         <div class="col-md-3"></div>

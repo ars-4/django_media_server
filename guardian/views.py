@@ -2,8 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from web.models import Person, AccountType
+from web.models import Person, AccountType, MonthTimer
 from django.contrib.auth import authenticate, login, logout
+from web.views import bill_receipt_creation
 
 
 def unauthenticated_user(view_func):
@@ -35,6 +36,12 @@ def register(request):
                 type=account_type,
             )
             person.save()
+            pk = user.id
+            bill_receipt_creation(pk)
+            timer = MonthTimer.objects.create(
+                person=person
+            )
+            timer.save()
             return redirect("LoginPage")
         else:
             return HttpResponse("An Error Occurred")
@@ -47,7 +54,7 @@ def register(request):
 @unauthenticated_user
 def login_r(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request=request,data=request.POST)
+        form = AuthenticationForm(request=request, data=request.POST)
         if form.is_valid():
             uname = form.cleaned_data['username']
             upass = form.cleaned_data['password']
@@ -69,4 +76,3 @@ def login_r(request):
 def logout_r(request):
     logout(request)
     return redirect('HomePage')
-
