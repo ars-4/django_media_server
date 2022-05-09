@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -66,11 +68,20 @@ class Movie(BasicModel):
 
 class BillReceipt(BasicModel):
     bill_of = models.ForeignKey(Person, null=True, on_delete=models.CASCADE)
+    price = models.IntegerField(null=True, default=0)
     status_choices = [
         ('Paid', 'paid'),
         ('Pending', 'pending')
     ]
-    status = models.CharField(max_length=20, null=True, default='pending', choices=status_choices)
+    status = models.CharField(max_length=20, null=True, default='Pending', choices=status_choices)
 
     def __str__(self):
         return self.bill_of.user.username
+
+
+class MonthTimer(BasicModel):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
+    current = models.DateTimeField(default=datetime.datetime.now(), null=True)
+
+    def __str__(self):
+        return str(self.date_updated)

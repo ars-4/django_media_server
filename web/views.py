@@ -1,8 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from web.forms import *
 from web.models import *
-from guardian.views import *
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 
@@ -25,7 +24,7 @@ def categories(request):
 def homepage(request):
     person = Person.objects.get(user_id=request.user.id)
     if person.type.id == 4:
-        return HttpResponse("Your Account Expired")
+        return render(request, 'expired.html')
     else:
         movies = Movie.objects.all()
         movies_filter = TagFilter(request.GET, queryset=movies)
@@ -49,7 +48,7 @@ def usertypemanagement(request):
         }
         return render(request, 'user/useraccounts.html', context)
     else:
-        return HttpResponse("Error")
+        return HttpResponse("Error Code 403")
 
 
 @login_required(login_url='LoginPage')
@@ -66,8 +65,9 @@ def usertypemanagementform(request, pk):
 @login_required(login_url='LoginPage')
 def moviepage(request, pk):
     person = Person.objects.get(user_id=request.user.id)
+    month_timer(person.id)
     if person.type.id == 4:
-        return HttpResponse("Your Account Expired")
+        return render(request, 'expired.html')
     else:
         movie = Movie.objects.get(id=pk)
         context = {
@@ -78,10 +78,15 @@ def moviepage(request, pk):
 
 @login_required(login_url='LoginPage')
 def moviepagewatchers(request, pk):
-    movie = Movie.objects.get(id=pk)
-    movie.watched_by = int(movie.watched_by) + 1
-    movie.save()
-    return moviepage(request, movie.id)
+    person = Person.objects.get(user_id=request.user.id)
+    month_timer(person.id)
+    if person.type.id == 4:
+        return render(request, 'expired.html')
+    else:
+        movie = Movie.objects.get(id=pk)
+        movie.watched_by = int(movie.watched_by) + 1
+        movie.save()
+        return moviepage(request, movie.id)
 
 
 # User / Person
@@ -120,13 +125,17 @@ def userupdatepage(request, pk):
 
 # Account Type
 def typecreatepage(request):
-    form = AccountTypeForm()
-    if request.method == 'POST':
-        form = AccountTypeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('ReadPackages')
-    return render(request, 'account_type/create.html', context={"form": form})
+    person = Person.objects.get(user_id=request.user.id)
+    if person.type.id == 1:
+        form = AccountTypeForm()
+        if request.method == 'POST':
+            form = AccountTypeForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('ReadPackages')
+        return render(request, 'account_type/create.html', context={"form": form})
+    else:
+        return HttpResponse("Error Code 403")
 
 
 def typereadpage(request):
@@ -135,34 +144,46 @@ def typereadpage(request):
 
 
 def typeupdatepage(request, pk):
-    account_type = AccountType.objects.get(id=pk)
-    form = AccountTypeForm(instance=account_type)
-    if request.method == 'POST':
-        form = AccountTypeForm(request.POST, instance=account_type)
-        if form.is_valid():
-            form.save()
-            return redirect('ReadPackages')
-    return render(request, 'account_type/update.html', context={"form": form})
+    person = Person.objects.get(user_id=request.user.id)
+    if person.type == 1:
+        account_type = AccountType.objects.get(id=pk)
+        form = AccountTypeForm(instance=account_type)
+        if request.method == 'POST':
+            form = AccountTypeForm(request.POST, instance=account_type)
+            if form.is_valid():
+                form.save()
+                return redirect('ReadPackages')
+        return render(request, 'account_type/update.html', context={"form": form})
+    else:
+        return HttpResponse("Error Code 403")
 
 
 def typedeletepage(request, pk):
-    account_type = AccountType.objects.get(id=pk)
-    account_type.delete()
-    return redirect('ReadPackages')
+    person = Person.objects.get(user_id=request.user.id)
+    if person.type.id == 1:
+        account_type = AccountType.objects.get(id=pk)
+        account_type.delete()
+        return redirect('ReadPackages')
+    else:
+        return HttpResponse("Error Code 403")
 
 
 # Movie
 def moviecreatepage(request):
-    form = MovieForm()
-    if request.method == 'POST':
-        form = MovieForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('HomePage')
-    context = {
-        'form': form,
-    }
-    return render(request, 'movie/create.html', context)
+    person = Person.objects.get(user_id=request.user.id)
+    if person.type.id == 2:
+        form = MovieForm()
+        if request.method == 'POST':
+            form = MovieForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                return redirect('HomePage')
+        context = {
+            'form': form,
+        }
+        return render(request, 'movie/create.html', context)
+    else:
+        return HttpResponse("Error Code 403")
 
 
 def tagcreatepage(request):
@@ -198,3 +219,40 @@ def actorreadpage(request, pk):
         'actor': actor
     }
     return render(request, 'actor/read.html', context)
+
+
+def bill_receipt_creation(pk):
+    person = Person.objects.get(id=pk)
+    bill_receipt = BillReceipt.objects.create(
+        bill_of=person,
+        price=person.type.price
+    )
+    bill_receipt.save()
+    due_bill_creation(pk)
+
+
+def due_bill_creation(pk):
+    person = Person.objects.get(id=pk)
+    receipts = BillReceipt.objects.filter(bill_of=person, status='Pending')
+    due = 0
+    for receipt in receipts:
+        due = int(receipt.price) + due
+    person.due = due
+    person.save()
+    if due > 3000:
+        person.type = AccountType.objects.get(id=3)
+        person.save()
+    else:
+        person.save()
+
+
+def month_timer(pk):
+    person = Person.objects.get(id=pk)
+    timer = MonthTimer.objects.get(person=person)
+    month_span = timer.current.date().day + 30
+    if timer.date_updated.date().day.__gt__(month_span):
+        timer.current = datetime.datetime.now()
+        timer.save()
+        bill_receipt_creation(pk)
+    else:
+        timer.save()
