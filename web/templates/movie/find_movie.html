@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <br>
+
+    <div class="row user">
+        <div class="col-md-3"></div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="col-md-12">
+                <input type="text" name="" id="uknown">
+                {{ find_movie:"Game" }}
+                <button>Check</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

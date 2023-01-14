@@ -3,6 +3,7 @@ from web.forms import *
 from web.models import *
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from web.utils import find_movie
 
 
 # Create your views here.
@@ -65,7 +66,7 @@ def usertypemanagementform(request, pk):
 @login_required(login_url='LoginPage')
 def moviepage(request, pk):
     person = Person.objects.get(user_id=request.user.id)
-    month_timer(person.id)
+#    month_timer(person.id)
     if person.type.id == 4:
         return render(request, 'expired.html')
     else:
@@ -79,7 +80,7 @@ def moviepage(request, pk):
 @login_required(login_url='LoginPage')
 def moviepagewatchers(request, pk):
     person = Person.objects.get(user_id=request.user.id)
-    month_timer(person.id)
+#    month_timer(person.id)
     if person.type.id == 4:
         return render(request, 'expired.html')
     else:
@@ -145,7 +146,7 @@ def typereadpage(request):
 
 def typeupdatepage(request, pk):
     person = Person.objects.get(user_id=request.user.id)
-    if person.type == 1:
+    if person.type.id == 1:
         account_type = AccountType.objects.get(id=pk)
         form = AccountTypeForm(instance=account_type)
         if request.method == 'POST':
@@ -171,7 +172,7 @@ def typedeletepage(request, pk):
 # Movie
 def moviecreatepage(request):
     person = Person.objects.get(user_id=request.user.id)
-    if person.type.id == 2:
+    if person.type.id == 1:
         form = MovieForm()
         if request.method == 'POST':
             form = MovieForm(request.POST, request.FILES)
@@ -180,11 +181,15 @@ def moviecreatepage(request):
                 return redirect('HomePage')
         context = {
             'form': form,
+            'find_movie': find_movie
         }
         return render(request, 'movie/create.html', context)
     else:
         return HttpResponse("Error Code 403")
 
+
+def find_movie(request):
+    return render(request, 'movie/find_movie.html', {'find_movie':find_movie})
 
 def tagcreatepage(request):
     form = TagForm()
